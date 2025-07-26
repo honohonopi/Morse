@@ -1,0 +1,336 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #000;
+    color: #fff;
+    font-family: "Courier New", monospace;
+    min-height: 100vh;
+    padding: 10px;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+}
+
+.container {
+    max-width: 400px;
+    margin: 0 auto;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.screen {
+    display: none;
+    flex: 1;
+}
+
+.screen.active {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Start Screen */
+.start-screen {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.title {
+    font-size: 24px;
+    margin-bottom: 20px;
+    border: 2px solid #fff;
+    padding: 15px;
+}
+
+.subtitle {
+    font-size: 14px;
+    margin-bottom: 30px;
+    line-height: 1.6;
+}
+
+.mode-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.mode-btn {
+    background: none;
+    border: 2px solid #fff;
+    color: #fff;
+    padding: 15px;
+    font-size: 16px;
+    font-family: "Courier New", monospace;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.mode-btn:hover {
+    background: #fff;
+    color: #000;
+}
+
+/* Game Screen */
+.game-screen {
+    justify-content: space-between;
+}
+
+.game-header {
+    text-align: center;
+    padding: 15px;
+    border: 1px solid #fff;
+    margin-bottom: 10px;
+}
+
+.score {
+    font-size: 18px;
+}
+
+.communication-area {
+    flex: 1;
+    border: 1px solid #fff;
+    padding: 15px;
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.opponent-section,
+.player-section {
+    flex: 1;
+    margin-bottom: 15px;
+}
+
+.section-title {
+    font-size: 14px;
+    margin-bottom: 8px;
+    color: #ccc;
+}
+
+.message-display {
+    background: #111;
+    border: 1px solid #333;
+    padding: 10px;
+    min-height: 40px;
+    font-size: 14px;
+}
+
+.morse-display {
+    background: #001100;
+    border: 1px solid #00ff00;
+    padding: 10px;
+    min-height: 40px;
+    font-size: 16px;
+    color: #00ff00;
+}
+
+/* Morse Sheet */
+.morse-sheet {
+    height: 60px;
+    border: 1px solid #fff;
+    margin-bottom: 15px;
+    position: relative;
+    overflow: hidden;
+    background: #111;
+}
+
+.sheet-line {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: #333;
+    transform: translateY(-50%);
+}
+
+.morse-note {
+    position: absolute;
+    top: 50%;
+    font-size: 24px;
+    color: #888;
+    /* 未取得はグレー */
+    font-weight: bold;
+    transform: translateY(-50%);
+    user-select: none;
+    transition: color 0.2s;
+    /* 色変化を滑らかに */
+}
+
+.morse-note.correct {
+    color: #0f0;
+    /* 正解時は緑 */
+}
+
+.morse-note.wrong {
+    color: #f00;
+    /* 誤り時は赤 */
+}
+
+/* 譜面の上に半透明で範囲を表示 */
+#morseSheet {
+    position: relative;
+}
+
+/* Controls */
+.controls {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.morse-input {
+    display: flex;
+    justify-content: center;
+}
+
+.tap-button {
+    width: 120px;
+    height: 120px;
+    border: 3px solid #fff;
+    background: none;
+    color: #fff;
+    font-size: 18px;
+    font-family: "Courier New", monospace;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.1s;
+    touch-action: manipulation;
+}
+
+.tap-button:active {
+    background: #fff;
+    color: #000;
+    transform: scale(0.95);
+}
+
+.control-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.control-btn {
+    flex: 1;
+    background: none;
+    border: 2px solid #fff;
+    color: #fff;
+    padding: 12px;
+    font-size: 16px;
+    font-family: "Courier New", monospace;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.control-btn:hover,
+.control-btn.active {
+    background: #fff;
+    color: #000;
+}
+
+.control-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Result Screen */
+.result-screen {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.result-title {
+    font-size: 24px;
+    margin-bottom: 20px;
+    border: 2px solid #fff;
+    padding: 15px;
+}
+
+.result-details {
+    margin-bottom: 30px;
+    line-height: 1.8;
+}
+
+.result-score {
+    font-size: 20px;
+    color: #00ff00;
+    margin-bottom: 20px;
+}
+
+.result-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* Status Messages */
+.status-message {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.9);
+    border: 2px solid #fff;
+    padding: 20px;
+    font-size: 16px;
+    text-align: center;
+    z-index: 1000;
+    min-width: 200px;
+}
+
+/* Progress Bar */
+.progress-bar {
+    height: 4px;
+    background: #333;
+    margin: 10px 0;
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: #00ff00;
+    width: 0%;
+    transition: width 0.3s;
+}
+
+/* Responsive adjustments */
+@media (max-height: 600px) {
+    .tap-button {
+        width: 80px;
+        height: 80px;
+        font-size: 14px;
+    }
+
+    .morse-sheet {
+        height: 40px;
+    }
+}
+
+#morseSheet {
+  position: relative; /* 追加：子要素の絶対配置基準に */
+}
+#hitLine {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 2px;           /* 線の太さ */
+  height: 100%;
+  background: rgba(255,255,0,0.8); /* 半透明イエロー */
+  transform: translateX(-50%);
+  pointer-events: none; /* 押下判定に影響しない */
+  z-index: 10;
+}
+#hitArea {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  background: rgba(255, 255, 0, 0.2); /* 半透明イエロー */
+  pointer-events: none;
+  z-index: 5;
+}

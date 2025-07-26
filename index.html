@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>モールス対話シミュレーター</title>
+    <link rel="stylesheet" href="style.css" type="text/css">
+  </head>
+  <body>
+    <div class="container">
+      <!-- Start Screen -->
+      <div class="screen active" id="startScreen">
+        <div class="start-screen">
+          <div class="title">モールス対話シミュレーター</div>
+          <div class="subtitle">
+            モールス信号を知らない人にも、<br />
+            リアルな通信体験を。<br /><br />
+            譜面に従ってモールス信号を入力し、<br />
+            実際の通信体験を楽しもう！<br />
+            短押し=「・」長押し=「－」
+          </div>
+          <div class="mode-buttons">
+            <button class="mode-btn" onclick="startGame('daily')">
+              日常会話モード<br />
+              <small>大学生同士のカジュアルな交信</small>
+            </button>
+            <button class="mode-btn" onclick="startGame('titanic')">
+              タイタニック通信モード<br />
+              <small>歴史的な遭難通信を体験</small>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Game Screen -->
+      <div class="screen" id="gameScreen">
+        <div class="game-screen">
+          <div class="game-header">
+            <div class="score">スコア: <span id="scoreValue">0</span>%</div>
+            <div class="progress-bar">
+              <div class="progress-fill" id="progressFill"></div>
+            </div>
+          </div>
+
+          <div class="communication-area">
+            <div class="opponent-section">
+              <div class="section-title">相手からの信号</div>
+              <div class="message-display" id="opponentMessage"></div>
+            </div>
+
+            <div class="player-section">
+              <div class="section-title">あなたの入力</div>
+              <div class="morse-display" id="playerMorse"></div>
+              <div class="message-display" id="playerMessage"></div>
+            </div>
+          </div>
+
+          <div class="morse-sheet" id="morseSheet">
+            <div class="sheet-line"></div>
+          </div>
+
+          <div class="controls">
+            <div class="morse-input">
+              <button class="tap-button" id="tapButton">TAP</button>
+            </div>
+            <div class="control-buttons">
+              <button
+                class="control-btn"
+                id="sendButton"
+                onclick="sendMessage()"
+              >
+                送信
+              </button>
+              <button class="control-btn" onclick="showStartScreen()">
+                戻る
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Result Screen -->
+      <div class="screen" id="resultScreen">
+        <div class="result-screen">
+          <div class="result-title">通信完了</div>
+          <div class="result-details">
+            <div class="result-score">
+              最終スコア: <span id="finalScore">0</span>%
+            </div>
+            <div id="resultMessage">お疲れ様でした！</div>
+          </div>
+          <div class="result-buttons">
+            <button class="mode-btn" onclick="restartGame()">
+              もう一度プレイ
+            </button>
+            <button class="mode-btn" onclick="showStartScreen()">
+              スタートに戻る
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>
