@@ -226,6 +226,9 @@ function startGame(mode) {
     scores = [];
     playerInput = "";
 
+    document.getElementById("scoreValue").textContent = "0";
+    document.getElementById("progressFill").style.width = "0%";
+
     showScreen("gameScreen");
     setupNextTurn();
 }
@@ -356,26 +359,15 @@ function handleTapEnd(e) {
 
 // Add morse input
 function addMorseInput(symbol) {
-    // １）押下シンボル
-    console.log(`→ input symbol: "${symbol}"`);
-
-    // ２）現状の notePosition
-    console.log(`   current notePosition: ${notePosition}`);
-
-    // ３）判定ウィンドウ取得
+    playerInput += symbol;
+    document.getElementById("playerMorse").textContent = playerInput;
     const { start, end } = getHitWindow();
-    console.log(`   hit window: ${start.toFixed(1)} – ${end.toFixed(1)}`);
-
-    // ４）ターゲットノート情報
     const target = currentNotes[notePosition];
     if (!target) {
         console.warn("   ⚠️ no target note at this index");
         return;
     }
-    console.log(`   target[${notePosition}]: symbol="${target.symbol}", startX=${target.startX.toFixed(1)}, collected=${target.collected}`);
-
     if (!target || target.collected) return;
-    // ５）判定
     if (target.startX > start && target.startX < end) {
         if (target.symbol === symbol) {
             target.element.classList.add("correct");
@@ -466,6 +458,7 @@ function showStatusMessage(message, duration) {
 
 // Show results
 function showResults() {
+    console.log("▶ showResults() called, scores:", scores, "currentTurn:", currentTurn);
     const avgScore =
         scores.length > 0
             ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length)
