@@ -57,6 +57,12 @@ const scenarios = {
         title: "日常会話モード",
         conversations: [
             {
+                send: "TEST",
+                translation: "TEST",
+                receive: "TEST",
+                receiveTranslation: "TEST",
+            },
+            {
                 send: "CQCQCQ DE JH1MRS JH1MRS AR K",
                 translation: "CQ（一般呼出し）こちらJH1MRS、どなたかいませんか？",
                 receive: "JH1MRS DE JG1LSJ GA OM K",
@@ -359,6 +365,7 @@ function handleTapEnd(e) {
 
 // Add morse input
 function addMorseInput(symbol) {
+    if (!currentNotes.length || notePosition >= currentNotes.length) return;
     playerInput += symbol;
     document.getElementById("playerMorse").textContent = playerInput;
     const { start, end } = getHitWindow();
@@ -411,17 +418,24 @@ function sendMessage() {
     // Play opponent response after delay
     setTimeout(async () => {
         const responseMessage = conversation.receive;
+        const translation = conversation.receiveTranslation;
         const responseMorse = textToMorse(responseMessage);
+        const opponentEl = document.getElementById("opponentMessage");
 
         showStatusMessage("相手からの応答を受信中...", 2000);
 
         setTimeout(async () => {
-            await playMorseMessage(responseMorse.replace(/\s/g, ""));
+            // ① モールス音再生 & 一文字ずつ表示
+            await playAndTypeResponse(responseMessage, opponentEl);
 
-            currentTurn++;
+            // ② 一文字目表示後 1秒で「メッセージ(翻訳)」に更新
             setTimeout(() => {
-                setupNextTurn();
-            }, 1000);
+                opponentEl.textContent = `${responseMessage} (${translation})`;
+            }, 100);
+
+            // ③ 次ターンへ移行
+            currentTurn++;
+            setTimeout(setupNextTurn, 2000);
         }, 2000);
     }, 3000);
 
@@ -531,3 +545,30 @@ function updateHitOverlay() {
     hitArea.style.width = (end - start) + "px";
 }
 
+/**
+ * モールス音を１文字分再生し終えたら、その文字を element に追加表示する。
+ * @param {string} text     ― 表示したい文字列（一文字ずつ処理）
+ * @param {HTMLElement} el  ― 出力先の要素
+ */
+async function playAndTypeResponse(text, el) {
+    el.textContent = "";
+    const letterPauseMs = 300;  // １文字ごとの間隔（morse の letterPauseDuration と合わせるなら 0.3s）
+    const wordPauseMs = 700;  // スペース時の間隔（wordPauseDuration）
+
+    for (const char of text) {
+        if (char === " ") {
+            // 空白ならスペース表示＋単語間待ち
+            el.textContent += " ";
+            await new Promise(r => setTimeout(r, wordPauseMs));
+        } else {
+            // その文字のモールス列を取得
+            const morse = textToMorse(char);
+            // dot/dash のみ抜き出して再生
+            await playMorseMessage(morse.replace(/\s/g, ""));
+            // 再生済み文字を追加表示
+            el.textContent += char;
+            // １文字分の間隔
+            await new Promise(r => setTimeout(r, letterPauseMs));
+        }
+    }
+}
