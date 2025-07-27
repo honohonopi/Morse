@@ -315,7 +315,7 @@ function startAnimation() {
         if (!isAnimating) return;
 
         currentNotes.forEach((note) => {
-            note.startX -= 0.5;
+            note.startX -= 1;
             note.element.style.left = note.startX + "px";
 
             if (note.startX < -30) {
