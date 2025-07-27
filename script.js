@@ -57,12 +57,6 @@ const scenarios = {
         title: "日常会話モード",
         conversations: [
             {
-                send: "TEST",
-                translation: "TEST",
-                receive: "TEST",
-                receiveTranslation: "TEST",
-            },
-            {
                 send: "CQCQCQ DE JH1MRS JH1MRS AR K",
                 translation: "CQ（一般呼出し）こちらJH1MRS、どなたかいませんか？",
                 receive: "JH1MRS DE JG1LSJ GA OM K",
